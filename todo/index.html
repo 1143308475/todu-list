@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的待办清单</title>
+    <meta name="theme-color" content="#2b8a68" />
+    <meta name="description" content="一个简单、清爽的个人待办清单" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">PERSONAL PLANNER</p>
+          <h1>我的待办清单<span>。</span></h1>
+          <p class="subtitle">把想完成的事情写下来，一件一件完成。</p>
+        </div>
+        <div class="progress-card" aria-label="完成进度">
+          <div class="progress-top"><span>完成进度</span><strong id="progressText">0%</strong></div>
+          <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+          <small id="progressCount">0 / 0 已完成</small>
+        </div>
+      </section>
+
+      <section class="composer card">
+        <form id="todoForm">
+          <label class="input-wrap title-input"><span class="sr-only">计划内容</span><input id="todoTitle" type="text" maxlength="120" placeholder="接下来想完成什么？" autocomplete="off" required /></label>
+          <label class="input-wrap date-input"><span class="calendar-icon">▣</span><span class="sr-only">结束时间</span><input id="todoDue" type="datetime-local" /></label>
+          <button class="primary-btn" type="submit"><span>＋</span> 添加计划</button>
+        </form>
+      </section>
+
+      <section class="toolbar">
+        <div class="tabs" role="tablist" aria-label="计划筛选">
+          <button class="tab active" data-filter="all" role="tab">全部 <span id="allCount">0</span></button>
+          <button class="tab" data-filter="active" role="tab">进行中 <span id="activeCount">0</span></button>
+          <button class="tab" data-filter="completed" role="tab">已完成 <span id="completedCount">0</span></button>
+        </div>
+        <button id="clearCompleted" class="text-btn" type="button">清除已完成</button>
+      </section>
+
+      <section id="todoList" class="todo-list" aria-live="polite"></section>
+      <section id="emptyState" class="empty-state card" hidden>
+        <div class="empty-icon">✦</div>
+        <h2 id="emptyTitle">还没有计划</h2>
+        <p id="emptyMessage">先添加一件想完成的事情吧。</p>
+      </section>
+      <footer>数据只保存在当前浏览器中 · 随时回来继续完成</footer>
+    </main>
+    <template id="todoTemplate">
+      <article class="todo-item card">
+        <button class="check-btn" type="button" aria-label="标记完成"><span>✓</span></button>
+        <div class="todo-content">
+          <div class="todo-title-row"><h3></h3><span class="status-pill"></span></div>
+          <p class="due-date"></p>
+        </div>
+        <div class="item-actions">
+          <button class="icon-btn edit-btn" type="button" aria-label="编辑">✎</button>
+          <button class="icon-btn delete-btn" type="button" aria-label="删除">⌫</button>
+        </div>
+      </article>
+    </template>
+    <dialog id="editDialog" class="edit-dialog">
+      <form id="editForm">
+        <p class="eyebrow">EDIT PLAN</p>
+        <h2>编辑计划</h2>
+        <label class="edit-label" for="editTitle">计划内容</label>
+        <input id="editTitle" class="edit-field" type="text" maxlength="120" required />
+        <label class="edit-label" for="editDue">结束时间 <span>选填</span></label>
+        <input id="editDue" class="edit-field" type="datetime-local" />
+        <div class="dialog-actions">
+          <button id="cancelEdit" class="cancel-btn" type="button">取消</button>
+          <button class="primary-btn" type="submit">保存修改</button>
+        </div>
+      </form>
+    </dialog>
+    <script src="app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+      }
+    </script>
+  </body>
+</html>
